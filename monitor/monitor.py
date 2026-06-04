@@ -2,7 +2,6 @@
 monitor.py — real-time terminal dashboard showing:
   • Pod-to-node assignments for custom-scheduler pods
   • CPU / RAM / Disk free per worker node
-  • Summary table of all pods and their status
 
 Run:  python monitor/monitor.py
 
@@ -114,28 +113,6 @@ def render(v1: client.CoreV1Api) -> None:
             for c in pod.spec.containers if c.resources
         )
 
-        print(fmt2.format(name, node, phase_str, f"{cpu_req}m", f"{ram_req:.0f}Mi"))
-
-    # ── Default-scheduler pods ───────────────────────────────────────────────
-    print_header("  POD ASSIGNMENTS  (default scheduler — comparison)")
-    default_pods = [p for p in pods if p.spec.scheduler_name != SCHEDULER_NAME
-                    and p.metadata.labels and p.metadata.labels.get("app") == "demo-default"]
-    default_pods.sort(key=lambda p: p.metadata.name)
-
-    for pod in default_pods:
-        name   = pod.metadata.name
-        node   = pod.spec.node_name or f"{YELLOW}(pending){RESET}"
-        phase  = pod.status.phase or "Unknown"
-        colour = GREEN if phase == "Running" else (YELLOW if phase == "Pending" else RED)
-        phase_str = f"{colour}{phase}{RESET}"
-        cpu_req = sum(
-            _parse_cpu_to_millicores((c.resources.requests or {}).get("cpu", "0"))
-            for c in pod.spec.containers if c.resources
-        )
-        ram_req = sum(
-            _parse_memory_to_mib((c.resources.requests or {}).get("memory", "0Ki"))
-            for c in pod.spec.containers if c.resources
-        )
         print(fmt2.format(name, node, phase_str, f"{cpu_req}m", f"{ram_req:.0f}Mi"))
 
     print(f"\n  {BOLD}Refreshing every {REFRESH_SECONDS}s — Ctrl+C to quit{RESET}")

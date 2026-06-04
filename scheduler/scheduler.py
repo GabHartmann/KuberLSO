@@ -111,17 +111,6 @@ def producer(v1: client.CoreV1Api, pod_queue: queue.Queue, stop: threading.Event
                          name, req.get("cpu", "?"), req.get("memory", "?"))
                 pod_queue.put(pod)
 
-            # ── default-scheduler pods: log placement when node is assigned ───
-            elif pod.spec.scheduler_name != SCHEDULER_NAME and pod.spec.node_name:
-                seen.add(name)
-                tier = (pod.metadata.labels or {}).get("tier", "-")
-                req  = {}
-                if pod.spec.containers[0].resources:
-                    req = pod.spec.containers[0].resources.requests or {}
-                log.info("[default]  pod=%-28s  node=%-22s  cpu=%s  mem=%s  tier=%s",
-                         name, pod.spec.node_name,
-                         req.get("cpu", "?"), req.get("memory", "?"), tier)
-
     except Exception as exc:
         log.error("Producer error: %s", exc)
 

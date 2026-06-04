@@ -72,12 +72,9 @@ KuberLSO/
 │   ├── metrics.py              # reads CPU, RAM and Disk from each worker
 │   └── scoring.py              # min-max normalisation and weighted scoring
 ├── pods/
-│   ├── pods-custom.yaml        # 15 pods → custom-scheduler
-│   └── pods-default.yaml       # 5 pods  → default scheduler (comparison)
+│   └── pods-custom.yaml        # 15 pods → custom-scheduler
 ├── monitor/
 │   └── monitor.py              # real-time dashboard (optional)
-├── stats/
-│   └── compare.py              # statistical comparison (optional)
 ├── requirements.txt
 └── setup.sh
 ```
@@ -145,10 +142,9 @@ Keep this terminal open. The scheduler waits for pods.
 
 ```bash
 kubectl apply -f pods/pods-custom.yaml
-kubectl apply -f pods/pods-default.yaml
 ```
 
-Watch Terminal 1: for each custom-scheduler pod you will see the node scores and the final BIND. Default-scheduler pods also appear automatically as `[default]` lines when Kubernetes assigns them a node.
+Watch Terminal 1: for each pod you will see the node scores and the final BIND.
 
 ### Step 7 — Verify placement
 
@@ -181,20 +177,10 @@ Example with 3 workers and a pod requesting 200m CPU / 128 MiB RAM:
 
 | Thread | Role |
 |---|---|
-| **Producer** | Opens a `watch.Watch()` stream against the Kubernetes API. Pods with `schedulerName: custom-scheduler` in `Pending` state are placed in the `queue.Queue` for scheduling. Pods handled by the default scheduler are logged in real time when they receive a node assignment — no action taken, observation only. |
+| **Producer** | Opens a `watch.Watch()` stream against the Kubernetes API. Pods with `schedulerName: custom-scheduler` in `Pending` state are placed in the `queue.Queue` for scheduling. |
 | **Consumer** | Blocks on `queue.get()`. When a pod arrives, calls `metrics.py` + `scoring.py` and performs the binding |
 
 The queue is the only communication channel between threads — no manual locks needed because `queue.Queue` is thread-safe by design.
-
----
-
-## Comparison with the default scheduler
-
-| Criterion | Default Kubernetes | Custom |
-|---|---|---|
-| Metrics | CPU + RAM | CPU + RAM + **Disk** |
-| Algorithm | LeastRequestedPriority | Weighted normalised score |
-| Disk awareness | Ignored | 25% of score |
 
 ---
 
@@ -207,14 +193,6 @@ python monitor/monitor.py
 ```
 
 Displays resources per worker (CPU, RAM, Disk), a utilisation bar, and a pod list with their assigned nodes. Refreshes every 3 s.
-
-### Statistical comparison
-
-```bash
-python stats/compare.py
-```
-
-Computes the standard deviation (σ) of pod distribution, CPU and RAM usage per worker for both groups (custom vs default). A lower σ = more balanced distribution.
 
 ---
 
