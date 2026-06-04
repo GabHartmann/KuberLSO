@@ -95,7 +95,7 @@ Also install:
 - **Docker Desktop** (must be running before anything else)
 - **Python 3.11+** with "Add to PATH" checked in the installer
 
-> All remaining commands must be run in **Git Bash**.
+> All remaining commands must be run on a **Bash Terminal**.
 
 ---
 
