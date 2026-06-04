@@ -1,0 +1,35 @@
+---
+# ClusterRole listing every API permission the custom scheduler needs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: custom-scheduler-role
+rules:
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/binding"]
+    verbs: ["create"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch", "update"]
+
+---
+# Bind the role to kubernetes-admin — the user Kind puts in the local kubeconfig.
+# The Python scheduler runs locally using that kubeconfig, so this is the correct subject.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: custom-scheduler-binding
+subjects:
+  - kind: User
+    name: kubernetes-admin
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: custom-scheduler-role
+  apiGroup: rbac.authorization.k8s.io

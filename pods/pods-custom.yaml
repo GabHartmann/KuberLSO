@@ -1,0 +1,334 @@
+# 15 pods using the custom-scheduler
+# Each has different CPU and RAM requests to demonstrate scheduling decisions.
+# The image "gcr.io/google-containers/pause:3.2" is a tiny no-op container
+# that just sleeps — perfect for simulating workloads in a demo.
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-web-01
+  namespace: default
+  labels:
+    app: demo
+    tier: web
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "64Mi"
+        limits:
+          cpu: "200m"
+          memory: "128Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-web-02
+  namespace: default
+  labels:
+    app: demo
+    tier: web
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "150m"
+          memory: "128Mi"
+        limits:
+          cpu: "300m"
+          memory: "256Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-api-01
+  namespace: default
+  labels:
+    app: demo
+    tier: api
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "250m"
+          memory: "256Mi"
+        limits:
+          cpu: "500m"
+          memory: "512Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-api-02
+  namespace: default
+  labels:
+    app: demo
+    tier: api
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "200m"
+          memory: "200Mi"
+        limits:
+          cpu: "400m"
+          memory: "400Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-db-01
+  namespace: default
+  labels:
+    app: demo
+    tier: database
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "512Mi"
+        limits:
+          cpu: "1000m"
+          memory: "1024Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-db-02
+  namespace: default
+  labels:
+    app: demo
+    tier: database
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "400m"
+          memory: "400Mi"
+        limits:
+          cpu: "800m"
+          memory: "800Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-cache-01
+  namespace: default
+  labels:
+    app: demo
+    tier: cache
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "256Mi"
+        limits:
+          cpu: "100m"
+          memory: "512Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-cache-02
+  namespace: default
+  labels:
+    app: demo
+    tier: cache
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "512Mi"
+        limits:
+          cpu: "100m"
+          memory: "1024Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-worker-01
+  namespace: default
+  labels:
+    app: demo
+    tier: worker
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "300m"
+          memory: "128Mi"
+        limits:
+          cpu: "600m"
+          memory: "256Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-worker-02
+  namespace: default
+  labels:
+    app: demo
+    tier: worker
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "350m"
+          memory: "192Mi"
+        limits:
+          cpu: "700m"
+          memory: "384Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-worker-03
+  namespace: default
+  labels:
+    app: demo
+    tier: worker
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "120m"
+          memory: "96Mi"
+        limits:
+          cpu: "240m"
+          memory: "192Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-monitor-01
+  namespace: default
+  labels:
+    app: demo
+    tier: monitoring
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "80m"
+          memory: "80Mi"
+        limits:
+          cpu: "160m"
+          memory: "160Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-batch-01
+  namespace: default
+  labels:
+    app: demo
+    tier: batch
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "600m"
+          memory: "256Mi"
+        limits:
+          cpu: "1200m"
+          memory: "512Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-batch-02
+  namespace: default
+  labels:
+    app: demo
+    tier: batch
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "700m"
+          memory: "320Mi"
+        limits:
+          cpu: "1400m"
+          memory: "640Mi"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-ml-01
+  namespace: default
+  labels:
+    app: demo
+    tier: ml
+spec:
+  schedulerName: custom-scheduler
+  containers:
+    - name: app
+      image: gcr.io/google-containers/pause:3.2
+      resources:
+        requests:
+          cpu: "800m"
+          memory: "768Mi"
+        limits:
+          cpu: "1600m"
+          memory: "1536Mi"
