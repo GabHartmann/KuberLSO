@@ -3,6 +3,8 @@
 Operating Systems Lab — UNISINOS 2026/01  
 Student: Gabriel Hartmann
 
+FULL, 10-minute video presentation: https://youtu.be/htX97Xwy2pk
+
 ---
 
 ## What this project does
