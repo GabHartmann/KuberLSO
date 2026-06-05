@@ -76,7 +76,7 @@ KuberLSO/
 ├── pods/
 │   └── pods-custom.yaml        # 15 pods → custom-scheduler
 ├── monitor/
-│   └── monitor.py              # real-time dashboard (optional)
+│   └── monitor.py              # real-time dashboard
 ├── requirements.txt
 └── setup.sh
 ```
